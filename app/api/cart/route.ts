@@ -5,14 +5,11 @@ import crypto from "crypto";
 import { findOrCreateCart } from "@/shared/lib/find-or-create-cart";
 import { CreateCartItemValues } from "@/shared/services/dto/cart.dto";
 import { updateCartTotalAmount } from "@/shared/lib/update-cart-total-amount";
-import { ingredients } from "@/prisma/constants";
 
 export async function GET(req: NextRequest) {
     try {
-        const userId = 1;
+        const userId = null;
         const token = req.cookies.get("cartToken")?.value;
-
-        console.log(token);
 
         if (!token) {
             return NextResponse.json({ totalAmount: 0, items: [] });
@@ -23,9 +20,6 @@ export async function GET(req: NextRequest) {
                 OR: [
                     {
                         tokenId: token,
-                    },
-                    {
-                        userId,
                     },
                 ],
             },
@@ -74,7 +68,9 @@ export async function POST(req: NextRequest) {
             where: {
                 cartId: userCart.id,
                 productItemId: data.productItemId,
-                ingredients: { every: { id: { in: data.ingredients } } },
+                ingredients: data.ingredients
+                    ? { every: { id: { in: data.ingredients } } }
+                    : undefined,
             },
         });
 
@@ -88,18 +84,18 @@ export async function POST(req: NextRequest) {
                     quantity: findCartItem.quantity + 1,
                 },
             });
-        }
-
-        await prisma.cartItem.create({
-            data: {
-                cartId: userCart.id,
-                productItemId: data.productItemId,
-                quantity: 1,
-                ingredients: {
-                    connect: data.ingredients?.map((id) => ({ id })),
+        } else {
+            await prisma.cartItem.create({
+                data: {
+                    cartId: userCart.id,
+                    productItemId: data.productItemId,
+                    quantity: 1,
+                    ingredients: {
+                        connect: data.ingredients?.map((id) => ({ id })),
+                    },
                 },
-            },
-        });
+            });
+        }
 
         const updatedUserCart = await updateCartTotalAmount(token);
 

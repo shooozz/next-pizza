@@ -1,18 +1,40 @@
+"use client";
 import { cn } from "@/shared/lib/utils";
 import React from "react";
 import { CartButton, Container, SearchInput } from ".";
 import Image from "next/image";
 import { Button } from "../ui";
-import { ArrowRight, ShoppingCart, User } from "lucide-react";
+import { User } from "lucide-react";
 import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
+import toast from "react-hot-toast";
 
 interface Props {
     className?: string;
+    hasSearch?: boolean;
+    hasCart?: boolean;
 }
 
-export const Header: React.FC<Props> = ({ className }) => {
+export const Header: React.FC<Props> = ({
+    className,
+    hasSearch = true,
+    hasCart = true,
+}) => {
+    const searchParams = useSearchParams();
+    const router = useRouter();
+    React.useEffect(() => {
+        if (searchParams.has("paid")) {
+            setTimeout(() => {
+                toast.success(
+                    "Заказ успешно оплачен! информация отправлена на почту"
+                );
+            }, 500);
+            router.replace("/");
+        }
+    }, []);
+
     return (
-        <header className={cn("border border-b", className)}>
+        <header className={cn(" border-b", className)}>
             <Container className="flex items-center justify-between py-8">
                 {/* Левая часть */}
                 <Link href="/">
@@ -34,9 +56,11 @@ export const Header: React.FC<Props> = ({ className }) => {
                     </div>
                 </Link>
 
-                <div className="mx-10 flex-1">
-                    <SearchInput />
-                </div>
+                {hasSearch && (
+                    <div className="mx-10 flex-1">
+                        <SearchInput />
+                    </div>
+                )}
 
                 {/* Правая часть */}
                 <div className="flex items-center gap-3">
@@ -48,9 +72,7 @@ export const Header: React.FC<Props> = ({ className }) => {
                         Войти
                     </Button>
 
-                    <div>
-                        <CartButton />
-                    </div>
+                    <div>{hasCart && <CartButton />}</div>
                 </div>
             </Container>
         </header>

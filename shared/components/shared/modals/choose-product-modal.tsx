@@ -4,9 +4,9 @@ import { Dialog, DialogContent } from "@/shared/components/ui/dialog";
 import React from "react";
 import { cn } from "@/shared/lib/utils";
 import { useRouter } from "next/navigation";
-import { ChoosePizzaForm, ChooseProductForm } from "..";
+import { ProductDrawer } from "..";
 import { ProductWithRelations } from "@/@types/prisma";
-import { useCartStore } from "@/shared/store";
+import { DialogTitle } from "@radix-ui/react-dialog";
 
 interface Props {
     product: ProductWithRelations;
@@ -18,21 +18,6 @@ export const ChoooseProductModal: React.FC<Props> = ({
     className,
 }) => {
     const router = useRouter();
-    const firstItem = product.items[0];
-    const isPizzaForm = Boolean(product.items[0].pizzaType);
-    const addCartItem = useCartStore((state) => state.addCartItem);
-
-    const onAddProduct = () => {
-        addCartItem({
-            productItemId: firstItem.id,
-        });
-    };
-    const onAddPizza = (productItemId: number, ingredients: number[]) => {
-        addCartItem({
-            productItemId,
-            ingredients,
-        });
-    };
 
     return (
         <Dialog open={Boolean(product)} onOpenChange={() => router.back()}>
@@ -42,22 +27,11 @@ export const ChoooseProductModal: React.FC<Props> = ({
                     className
                 )}
             >
-                {isPizzaForm ? (
-                    <ChoosePizzaForm
-                        imageUrl={product.imageUrl}
-                        name={product.name}
-                        ingredients={product.ingredients}
-                        items={product.items}
-                        onSubmit={onAddPizza}
-                    />
-                ) : (
-                    <ChooseProductForm
-                        imageUrl={product.imageUrl}
-                        name={product.name}
-                        onSubmit={onAddProduct}
-                        price={firstItem.price}
-                    />
-                )}
+                <DialogTitle />
+                <ProductDrawer
+                    product={product}
+                    onSubmit={() => router.back()}
+                />
             </DialogContent>
         </Dialog>
     );

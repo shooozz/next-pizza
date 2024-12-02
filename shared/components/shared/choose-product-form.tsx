@@ -9,6 +9,7 @@ interface Props {
     price: number;
     className?: string;
     onSubmit?: VoidFunction;
+    loading?: boolean;
 }
 
 export const ChooseProductForm: React.FC<Props> = ({
@@ -17,6 +18,7 @@ export const ChooseProductForm: React.FC<Props> = ({
     price,
     onSubmit,
     className,
+    loading,
 }) => {
     return (
         <div className={cn(className, "flex flex-1")}>
@@ -32,7 +34,8 @@ export const ChooseProductForm: React.FC<Props> = ({
                 <Title text={name} size="md" className="font-extrabold mb-1" />
 
                 <Button
-                    onClick={onSubmit}
+                    loading={loading}
+                    onClick={() => onSubmit?.()}
                     className="h-[55px] px-10 text-base rounded-[18px] w-full mt-5"
                 >
                     Добавить в корзину за {price} ₽
