@@ -1,6 +1,6 @@
 "use client";
 import { cn } from "@/shared/lib/utils";
-import React, { useState } from "react";
+import React, { Suspense, useState } from "react";
 import {
     AuthModal,
     CartButton,
@@ -49,48 +49,50 @@ export const Header: React.FC<Props> = ({
     }, []);
 
     return (
-        <header className={cn(" border-b", className)}>
-            <Container className="flex items-center justify-between py-8">
-                {/* Левая часть */}
-                <Link href="/">
-                    <div className="flex items-center gap-4">
-                        <Image
-                            src="/logo.png"
-                            alt="Logo"
-                            width={35}
-                            height={35}
-                        />
-                        <div>
-                            <h1 className="text-2xl uppercase font-black">
-                                Next Pizza
-                            </h1>
-                            <p className="text-sm text-gray-400 leading-3">
-                                вкусней уже некуда
-                            </p>
+        <Suspense fallback={<div>Загрузка...</div>}>
+            <header className={cn(" border-b", className)}>
+                <Container className="flex items-center justify-between py-8">
+                    {/* Левая часть */}
+                    <Link href="/">
+                        <div className="flex items-center gap-4">
+                            <Image
+                                src="/logo.png"
+                                alt="Logo"
+                                width={35}
+                                height={35}
+                            />
+                            <div>
+                                <h1 className="text-2xl uppercase font-black">
+                                    Next Pizza
+                                </h1>
+                                <p className="text-sm text-gray-400 leading-3">
+                                    вкусней уже некуда
+                                </p>
+                            </div>
                         </div>
+                    </Link>
+
+                    {hasSearch && (
+                        <div className="mx-10 flex-1">
+                            <SearchInput />
+                        </div>
+                    )}
+
+                    {/* Правая часть */}
+                    <div className="flex items-center gap-3">
+                        <AuthModal
+                            open={openAuthModal}
+                            onClose={() => setOpenAuthModal(false)}
+                        />
+
+                        <ProfileButton
+                            onClickSignIn={() => setOpenAuthModal(true)}
+                        />
+
+                        <div>{hasCart && <CartButton />}</div>
                     </div>
-                </Link>
-
-                {hasSearch && (
-                    <div className="mx-10 flex-1">
-                        <SearchInput />
-                    </div>
-                )}
-
-                {/* Правая часть */}
-                <div className="flex items-center gap-3">
-                    <AuthModal
-                        open={openAuthModal}
-                        onClose={() => setOpenAuthModal(false)}
-                    />
-
-                    <ProfileButton
-                        onClickSignIn={() => setOpenAuthModal(true)}
-                    />
-
-                    <div>{hasCart && <CartButton />}</div>
-                </div>
-            </Container>
-        </header>
+                </Container>
+            </header>
+        </Suspense>
     );
 };
