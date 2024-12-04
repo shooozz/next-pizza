@@ -4,6 +4,7 @@ import {
     TopBar,
     Filters,
     ProductsGroupList,
+    Stories,
 } from "../../shared/components/shared";
 import { Suspense } from "react";
 import { findPizzas, GetSearchParams } from "@/shared/lib/find-pizzas";
@@ -25,6 +26,9 @@ export default async function Home({
                     (category) => category.products.length > 0
                 )}
             />
+
+            <Stories />
+
             <Container className="mt-10 pb-14">
                 <div className="flex gap-[80px]">
                     {/* Фильтрация */}

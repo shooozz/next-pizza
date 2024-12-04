@@ -2,6 +2,7 @@ import { Button, Dialog, DialogContent } from "@/shared/components/ui";
 import { signIn } from "next-auth/react";
 import React from "react";
 import { LoginForm } from "./forms/login-form";
+import { RegisterForm } from "./forms/register-form";
 
 interface Props {
     open: boolean;
@@ -24,7 +25,7 @@ export const AuthModal: React.FC<Props> = ({ open, onClose }) => {
                 {type === "login" ? (
                     <LoginForm onClose={handleClose} />
                 ) : (
-                    <h1>REGISTER</h1>
+                    <RegisterForm onClose={handleClose} />
                 )}
 
                 <hr />
@@ -48,7 +49,7 @@ export const AuthModal: React.FC<Props> = ({ open, onClose }) => {
                         GitHub
                     </Button>
 
-                    <Button
+                    {/* <Button
                         variant="secondary"
                         onClick={() =>
                             signIn("google", {
@@ -64,12 +65,12 @@ export const AuthModal: React.FC<Props> = ({ open, onClose }) => {
                             src="https://fonts.gstatic.com/s/i/productlogos/googleg/v6/24px.svg"
                         />
                         Google
-                    </Button>
+                    </Button> */}
                     <Button
                         variant="outline"
                         onClick={onSwitchType}
                         type="button"
-                        className="h-12"
+                        className="gap-2 h-12 p-2 flex-1"
                     >
                         {type !== "login" ? "Войти" : "Регистрация"}
                     </Button>

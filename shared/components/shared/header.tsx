@@ -29,13 +29,22 @@ export const Header: React.FC<Props> = ({
     const router = useRouter();
 
     React.useEffect(() => {
+        let toastMessage = "";
         if (searchParams.has("paid")) {
+            toastMessage =
+                "Заказ успешно оплачен! информация отправлена на почту";
+        }
+        if (searchParams.has("verified")) {
+            toastMessage = "Почта успещно подтверждена";
+        }
+        if (toastMessage) {
             setTimeout(() => {
-                toast.success(
-                    "Заказ успешно оплачен! информация отправлена на почту"
-                );
-            }, 500);
-            router.replace("/");
+                router.replace("/");
+
+                toast.success(toastMessage, {
+                    duration: 3000,
+                });
+            }, 1000);
         }
     }, []);
 
