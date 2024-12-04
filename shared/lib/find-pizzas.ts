@@ -1,4 +1,3 @@
-import { ingredients } from "@/prisma/constants";
 import { prisma } from "@/prisma/prisma-client";
 
 export interface GetSearchParams {
