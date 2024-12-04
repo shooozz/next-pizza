@@ -18,9 +18,9 @@ export default function HomeLayout({
         <main className="min-h-screen bg-white">
             <Suspense>
                 <Header />
+                {children}
+                {modal}
             </Suspense>
-            {children}
-            {modal}
         </main>
     );
 }
