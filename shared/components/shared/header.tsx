@@ -1,10 +1,14 @@
 "use client";
 import { cn } from "@/shared/lib/utils";
-import React from "react";
-import { CartButton, Container, SearchInput } from ".";
+import React, { useState } from "react";
+import {
+    AuthModal,
+    CartButton,
+    Container,
+    ProfileButton,
+    SearchInput,
+} from ".";
 import Image from "next/image";
-import { Button } from "../ui";
-import { User } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
@@ -20,8 +24,10 @@ export const Header: React.FC<Props> = ({
     hasSearch = true,
     hasCart = true,
 }) => {
+    const [openAuthModal, setOpenAuthModal] = useState(false);
     const searchParams = useSearchParams();
     const router = useRouter();
+
     React.useEffect(() => {
         if (searchParams.has("paid")) {
             setTimeout(() => {
@@ -64,13 +70,14 @@ export const Header: React.FC<Props> = ({
 
                 {/* Правая часть */}
                 <div className="flex items-center gap-3">
-                    <Button
-                        variant="outline"
-                        className="flex items-center gap-1"
-                    >
-                        <User size={16} />
-                        Войти
-                    </Button>
+                    <AuthModal
+                        open={openAuthModal}
+                        onClose={() => setOpenAuthModal(false)}
+                    />
+
+                    <ProfileButton
+                        onClickSignIn={() => setOpenAuthModal(true)}
+                    />
 
                     <div>{hasCart && <CartButton />}</div>
                 </div>
