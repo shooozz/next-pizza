@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { Suspense } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useCart } from "@/shared/hooks";
@@ -83,45 +83,47 @@ export default function Checkout() {
     };
 
     return (
-        <Container className="mt-10">
-            <Title
-                text="Оформление заказа"
-                className="font-extrabold mb-8 text-[36px]"
-            />
-            <FormProvider {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)}>
-                    <div className="flex gap-10">
-                        <div className="flex flex-col gap-10 flex-1 mb-20">
-                            <CheckoutCart
-                                items={items}
-                                onClickCountButton={onClickCountButton}
-                                removeCartItem={removeCartItem}
-                                loading={loading}
-                            />
-                            <CheckoutPersonalForm
-                                className={
-                                    loading
-                                        ? "opacity-40 pointer-events-none"
-                                        : ""
-                                }
-                            />
-                            <CheckoutAddressForm
-                                className={
-                                    loading
-                                        ? "opacity-40 pointer-events-none"
-                                        : ""
-                                }
-                            />
+        <Suspense>
+            <Container className="mt-10">
+                <Title
+                    text="Оформление заказа"
+                    className="font-extrabold mb-8 text-[36px]"
+                />
+                <FormProvider {...form}>
+                    <form onSubmit={form.handleSubmit(onSubmit)}>
+                        <div className="flex gap-10">
+                            <div className="flex flex-col gap-10 flex-1 mb-20">
+                                <CheckoutCart
+                                    items={items}
+                                    onClickCountButton={onClickCountButton}
+                                    removeCartItem={removeCartItem}
+                                    loading={loading}
+                                />
+                                <CheckoutPersonalForm
+                                    className={
+                                        loading
+                                            ? "opacity-40 pointer-events-none"
+                                            : ""
+                                    }
+                                />
+                                <CheckoutAddressForm
+                                    className={
+                                        loading
+                                            ? "opacity-40 pointer-events-none"
+                                            : ""
+                                    }
+                                />
+                            </div>
+                            <div className="w-[450px]">
+                                <CheckoutSidebar
+                                    totalAmount={totalAmount}
+                                    loading={loading || submitting}
+                                />
+                            </div>
                         </div>
-                        <div className="w-[450px]">
-                            <CheckoutSidebar
-                                totalAmount={totalAmount}
-                                loading={loading || submitting}
-                            />
-                        </div>
-                    </div>
-                </form>
-            </FormProvider>
-        </Container>
+                    </form>
+                </FormProvider>
+            </Container>
+        </Suspense>
     );
 }
