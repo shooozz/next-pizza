@@ -1,5 +1,5 @@
-import qs from "qs";
 import React from "react";
+import qs from "qs";
 import { Filters } from "./use-filters";
 import { useRouter } from "next/navigation";
 
@@ -20,10 +20,14 @@ export const useQueryFilters = (filters: Filters) => {
                 arrayFormat: "comma",
             });
 
+            console.log(params);
+
             router.push(`?${query}`, {
                 scroll: false,
             });
 
+            isMounted.current = true;
+        } else {
             isMounted.current = true;
         }
     }, [filters]);

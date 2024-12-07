@@ -6,7 +6,6 @@ import {
     ProductsGroupList,
     Stories,
 } from "../../shared/components/shared";
-import { Suspense } from "react";
 import { findPizzas, GetSearchParams } from "@/shared/lib/find-pizzas";
 
 export default async function Home({
@@ -33,9 +32,7 @@ export default async function Home({
                 <div className="flex gap-[80px]">
                     {/* Фильтрация */}
                     <div className="w-[250px]">
-                        <Suspense>
-                            <Filters />
-                        </Suspense>
+                        <Filters />
                     </div>
 
                     {/* Список товаров */}
